@@ -1,5 +1,8 @@
 const express = require('express');
+const bcrypt = require("bcryptjs");
 const _ = require('underscore');
+
+const { verificaToken } = require('../middlewares/autenticacion');
 
 const Usuario = require("../models/Usuario");
 
@@ -10,7 +13,7 @@ const app = express();
  * Petición get: Devolver todos los usuarios
  * ======================================
  */
-app.get('/usuario', (req, res) => {
+app.get('/usuario', verificaToken, (req, res) => {
 
     // La proyección son los campos que quieres que devuelva la consulta
     let projection = "nombre email";
@@ -90,7 +93,7 @@ app.post('/usuario', (req, res) => {
     let usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, 10) //Se encripta la contraseña con el módulo bcryptjs
     });
 
     usuario.save((err, usuarioDB) => {

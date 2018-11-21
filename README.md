@@ -7,3 +7,5 @@
 - express: 
 - mongoose-unique-validator: to make unique validations in schemas
 - underscore: 
+- bcryptjs: Para encriptar contraseñas
+- jsonwebtoken: Para los tokens

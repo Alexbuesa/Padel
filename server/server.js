@@ -21,4 +21,6 @@ app.use(express.static(path.resolve(__dirname, "../public")));
 //Configuración global de rutas
 app.use(require("./routes/index"));
 
+console.log(process.env);
+
 app.listen(process.env.PORT, () => console.log("Escuchando puerto: ", process.env.PORT));

@@ -1,4 +1,6 @@
 const express = require('express');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const Usuario = require("../models/Usuario");
 
@@ -39,7 +41,7 @@ app.post("/login", (req, res) => {
         }
 
         // Contraseña incorrecta
-        if (body.password !== usuarioDB.password) {
+        if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -48,10 +50,15 @@ app.post("/login", (req, res) => {
             });
         }
 
+        // token es lo mismo que authorization
+        let token = jwt.sign({
+            usuario: usuarioDB
+        }, process.env.SEED, { expiresIn: process.env.CADUCIDAD_TOKEN });
+
         res.json({
             ok: true,
             usuario: usuarioDB,
-            body
+            token
         });
 
     });
